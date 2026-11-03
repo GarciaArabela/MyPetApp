@@ -1,0 +1,13 @@
+{
+  "name": "mypetapp-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fetch a Dog Breed / Pet Discovery App",
+  "scripts": {
+    "dev": "npm --prefix MyPetApp run dev",
+    "build": "npm --prefix MyPetApp run build",
+    "preview": "npm --prefix MyPetApp run preview",
+    "lint": "npm --prefix MyPetApp run lint"
+  }
+}
+

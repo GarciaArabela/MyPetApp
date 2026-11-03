@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f1e9">
+    <title>Fetch a Dog Breed</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <a class="wordmark" href="#" aria-label="Fetch a Dog Breed home">
+          <span class="wordmark-icon" aria-hidden="true">🐾</span>
+          <span>FETCH A FRIEND</span>
+        </a>
+        <span class="topbar-note">A little surprise, every time</span>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">YOUR DAILY DOSE OF DOG</p>
+        <h1 id="page-title">Meet a new<br><span>kind of friend.</span></h1>
+        <p class="description">Curious about dog breeds? Fetch a dog and discover their breed in one click.</p>
+        <button class="fetch-button" id="fetch-dog" type="button">
+          <span aria-hidden="true">✦</span>
+          <span>Fetch a dog</span>
+          <span class="button-arrow" aria-hidden="true">→</span>
+        </button>
+        <p class="status" id="status" role="status" aria-live="polite">Ready when you are.</p>
+      </section>
+
+      <section class="result-card" id="result" aria-live="polite" hidden>
+        <div class="photo-wrap">
+          <img id="dog-image" alt="" hidden>
+          <div class="image-placeholder" id="image-placeholder" aria-hidden="true">🐶</div>
+          <span class="photo-label">YOUR NEW PAL</span>
+        </div>
+        <div class="breed-info">
+          <p class="breed-label">BREED</p>
+          <h2 id="breed-name"></h2>
+          <p class="breed-caption">Every dog is one of a kind. This one just happens to be a...</p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>Made for dog people</span>
+        <span class="footer-dot" aria-hidden="true">•</span>
+        <span>Powered by Dog CEO</span>
+      </footer>
+    </main>
+  </body>
+</html>
