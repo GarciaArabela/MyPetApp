@@ -5,12 +5,14 @@ import {
   type DogPet,
   fetchDog,
   getBreedOptions,
+  POPULAR_BREEDS,
   soundPlayer,
 } from './dogService';
 
 export default function App() {
   const [breeds, setBreeds] = useState<BreedOption[]>([]);
   const [selectedBreedKey, setSelectedBreedKey] = useState<string>('random');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentDog, setCurrentDog] = useState<DogPet | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -59,6 +61,23 @@ export default function App() {
     if (selectedBreedKey === 'random') return undefined;
     return breeds.find((b) => `${b.breed}__${b.subBreed}` === selectedBreedKey);
   }, [breeds, selectedBreedKey]);
+
+  const filteredBreeds = useMemo(() => {
+    if (!searchTerm.trim()) return breeds;
+    const term = searchTerm.toLowerCase().trim();
+    return breeds.filter((b) => b.label.toLowerCase().includes(term));
+  }, [breeds, searchTerm]);
+
+  const handleQuickBreedSelect = (pop: typeof POPULAR_BREEDS[number]) => {
+    const key = `${pop.breed}__${pop.subBreed}`;
+    setSelectedBreedKey(key);
+    const targetOption: BreedOption = {
+      breed: pop.breed,
+      subBreed: pop.subBreed,
+      label: pop.label,
+    };
+    handleFetch(targetOption);
+  };
 
   const isFavorited = useMemo(() => {
     if (!currentDog) return false;
@@ -183,23 +202,76 @@ export default function App() {
 
           <div className="controls-group">
             <div className="selector-box">
-              <label htmlFor="breed-select" className="selector-label">
-                Choose a Breed (or Surprise Me)
-              </label>
-              <select
-                id="breed-select"
-                className="breed-select"
-                value={selectedBreedKey}
-                onChange={(e) => setSelectedBreedKey(e.target.value)}
-                disabled={isLoading}
-              >
-                <option value="random">✨ Any Breed (Surprise Me)</option>
-                {breeds.map((b) => (
-                  <option key={`${b.breed}__${b.subBreed}`} value={`${b.breed}__${b.subBreed}`}>
-                    {b.label}
-                  </option>
-                ))}
-              </select>
+              <div className="selector-header">
+                <label htmlFor="breed-select" className="selector-label">
+                  Choose Breed ({breeds.length} Available)
+                </label>
+                {searchTerm && (
+                  <button
+                    type="button"
+                    className="clear-search-btn"
+                    onClick={() => setSearchTerm('')}
+                  >
+                    Clear filter
+                  </button>
+                )}
+              </div>
+
+              <div className="search-and-select">
+                <input
+                  type="text"
+                  className="breed-search-input"
+                  placeholder="🔍 Type to filter breeds (e.g. corgi, husky, terrier)..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  disabled={isLoading}
+                />
+
+                <select
+                  id="breed-select"
+                  className="breed-select"
+                  value={selectedBreedKey}
+                  onChange={(e) => setSelectedBreedKey(e.target.value)}
+                  disabled={isLoading}
+                >
+                  <option value="random">✨ Any Breed (Surprise Me)</option>
+                  {filteredBreeds.length > 0 ? (
+                    filteredBreeds.map((b) => (
+                      <option key={`${b.breed}__${b.subBreed}`} value={`${b.breed}__${b.subBreed}`}>
+                        {b.label}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="none" disabled>
+                      No breeds matching "{searchTerm}"
+                    </option>
+                  )}
+                </select>
+              </div>
+            </div>
+
+            {/* POPULAR BREEDS QUICK SELECT */}
+            <div className="popular-breeds-box">
+              <span className="popular-label">Popular Breeds:</span>
+              <div className="popular-chips">
+                {POPULAR_BREEDS.map((pop) => {
+                  const key = `${pop.breed}__${pop.subBreed}`;
+                  const isActive = selectedBreedKey === key;
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`popular-chip ${isActive ? 'active' : ''}`}
+                      onClick={() => handleQuickBreedSelect(pop)}
+                      disabled={isLoading}
+                      title={`Fetch a ${pop.label}`}
+                    >
+                      <span>{pop.emoji}</span>
+                      <span>{pop.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="action-row">

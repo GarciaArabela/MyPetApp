@@ -24,6 +24,111 @@ export function toTitleCase(value: string): string {
     .join(' ');
 }
 
+const FALLBACK_BREEDS: BreedOption[] = [
+  { breed: 'retriever', subBreed: 'golden', label: 'Golden Retriever' },
+  { breed: 'corgi', subBreed: 'pembroke', label: 'Pembroke Corgi' },
+  { breed: 'corgi', subBreed: 'cardigan', label: 'Cardigan Corgi' },
+  { breed: 'husky', subBreed: '', label: 'Husky' },
+  { breed: 'bulldog', subBreed: 'french', label: 'French Bulldog' },
+  { breed: 'bulldog', subBreed: 'english', label: 'English Bulldog' },
+  { breed: 'bulldog', subBreed: 'boston', label: 'Boston Bulldog' },
+  { breed: 'shiba', subBreed: '', label: 'Shiba Inu' },
+  { breed: 'germanshepherd', subBreed: '', label: 'German Shepherd' },
+  { breed: 'poodle', subBreed: 'toy', label: 'Toy Poodle' },
+  { breed: 'poodle', subBreed: 'standard', label: 'Standard Poodle' },
+  { breed: 'poodle', subBreed: 'miniature', label: 'Miniature Poodle' },
+  { breed: 'labrador', subBreed: '', label: 'Labrador Retriever' },
+  { breed: 'beagle', subBreed: '', label: 'Beagle' },
+  { breed: 'dachshund', subBreed: '', label: 'Dachshund' },
+  { breed: 'pomeranian', subBreed: '', label: 'Pomeranian' },
+  { breed: 'samoyed', subBreed: '', label: 'Samoyed' },
+  { breed: 'mountain', subBreed: 'bernese', label: 'Bernese Mountain Dog' },
+  { breed: 'mountain', subBreed: 'swiss', label: 'Swiss Mountain Dog' },
+  { breed: 'australian', subBreed: 'shepherd', label: 'Australian Shepherd' },
+  { breed: 'australian', subBreed: 'kelpie', label: 'Australian Kelpie' },
+  { breed: 'pug', subBreed: '', label: 'Pug' },
+  { breed: 'boxer', subBreed: '', label: 'Boxer' },
+  { breed: 'chihuahua', subBreed: '', label: 'Chihuahua' },
+  { breed: 'doberman', subBreed: '', label: 'Doberman' },
+  { breed: 'rottweiler', subBreed: '', label: 'Rottweiler' },
+  { breed: 'dalmatian', subBreed: '', label: 'Dalmatian' },
+  { breed: 'collie', subBreed: 'border', label: 'Border Collie' },
+  { breed: 'dane', subBreed: 'great', label: 'Great Dane' },
+  { breed: 'shihtzu', subBreed: '', label: 'Shih Tzu' },
+  { breed: 'terrier', subBreed: 'yorkshire', label: 'Yorkshire Terrier' },
+  { breed: 'terrier', subBreed: 'jack', label: 'Jack Russell Terrier' },
+  { breed: 'terrier', subBreed: 'scottish', label: 'Scottish Terrier' },
+  { breed: 'terrier', subBreed: 'cairn', label: 'Cairn Terrier' },
+  { breed: 'terrier', subBreed: 'westhighland', label: 'West Highland Terrier' },
+  { breed: 'terrier', subBreed: 'bull', label: 'Bull Terrier' },
+  { breed: 'akita', subBreed: '', label: 'Akita' },
+  { breed: 'malamute', subBreed: '', label: 'Alaskan Malamute' },
+  { breed: 'maltese', subBreed: '', label: 'Maltese' },
+  { breed: 'bichon', subBreed: 'frise', label: 'Bichon Frise' },
+  { breed: 'hound', subBreed: 'basset', label: 'Basset Hound' },
+  { breed: 'hound', subBreed: 'blood', label: 'Bloodhound' },
+  { breed: 'hound', subBreed: 'afghan', label: 'Afghan Hound' },
+  { breed: 'hound', subBreed: 'ibizan', label: 'Ibizan Hound' },
+  { breed: 'spaniel', subBreed: 'cocker', label: 'Cocker Spaniel' },
+  { breed: 'spaniel', subBreed: 'brittany', label: 'Brittany Spaniel' },
+  { breed: 'spaniel', subBreed: 'english', label: 'English Springer Spaniel' },
+  { breed: 'mastiff', subBreed: 'bull', label: 'Bull Mastiff' },
+  { breed: 'mastiff', subBreed: 'tibetan', label: 'Tibetan Mastiff' },
+  { breed: 'mastiff', subBreed: 'english', label: 'English Mastiff' },
+  { breed: 'newfoundland', subBreed: '', label: 'Newfoundland' },
+  { breed: 'stbernard', subBreed: '', label: 'Saint Bernard' },
+  { breed: 'vizsla', subBreed: '', label: 'Vizsla' },
+  { breed: 'weimaraner', subBreed: '', label: 'Weimaraner' },
+  { breed: 'whippet', subBreed: '', label: 'Whippet' },
+  { breed: 'greyhound', subBreed: 'italian', label: 'Italian Greyhound' },
+  { breed: 'havanese', subBreed: '', label: 'Havanese' },
+  { breed: 'papillon', subBreed: '', label: 'Papillon' },
+  { breed: 'chow', subBreed: '', label: 'Chow Chow' },
+  { breed: 'sharpei', subBreed: '', label: 'Shar Pei' },
+  { breed: 'basenji', subBreed: '', label: 'Basenji' },
+  { breed: 'schnauzer', subBreed: 'giant', label: 'Giant Schnauzer' },
+  { breed: 'schnauzer', subBreed: 'miniature', label: 'Miniature Schnauzer' },
+  { breed: 'sheepdog', subBreed: 'shetland', label: 'Shetland Sheepdog' },
+  { breed: 'sheepdog', subBreed: 'english', label: 'Old English Sheepdog' },
+  { breed: 'cockapoo', subBreed: '', label: 'Cockapoo' },
+  { breed: 'labradoodle', subBreed: '', label: 'Labradoodle' },
+  { breed: 'cavapoo', subBreed: '', label: 'Cavapoo' },
+  { breed: 'keeshond', subBreed: '', label: 'Keeshond' },
+  { breed: 'lhasa', subBreed: '', label: 'Lhasa Apso' },
+  { breed: 'pekinese', subBreed: '', label: 'Pekingese' },
+  { breed: 'pitbull', subBreed: '', label: 'Pitbull' },
+  { breed: 'setter', subBreed: 'irish', label: 'Irish Setter' },
+  { breed: 'setter', subBreed: 'english', label: 'English Setter' },
+  { breed: 'pointer', subBreed: 'german', label: 'German Pointer' },
+  { breed: 'pyrenees', subBreed: '', label: 'Great Pyrenees' },
+  { breed: 'ridgeback', subBreed: 'rhodesian', label: 'Rhodesian Ridgeback' },
+  { breed: 'waterdog', subBreed: 'spanish', label: 'Spanish Water Dog' },
+  { breed: 'wolfhound', subBreed: 'irish', label: 'Irish Wolfhound' },
+];
+
+export const POPULAR_BREEDS: { label: string; breed: string; subBreed: string; emoji: string }[] = [
+  { label: 'Golden Retriever', breed: 'retriever', subBreed: 'golden', emoji: '🐕' },
+  { label: 'Corgi', breed: 'corgi', subBreed: 'pembroke', emoji: '🦊' },
+  { label: 'Husky', breed: 'husky', subBreed: '', emoji: '🐺' },
+  { label: 'French Bulldog', breed: 'bulldog', subBreed: 'french', emoji: '🐶' },
+  { label: 'Shiba Inu', breed: 'shiba', subBreed: '', emoji: '🐾' },
+  { label: 'Dachshund', breed: 'dachshund', subBreed: '', emoji: '🐕' },
+  { label: 'Poodle', breed: 'poodle', subBreed: 'toy', emoji: '🐩' },
+  { label: 'German Shepherd', breed: 'germanshepherd', subBreed: '', emoji: '🐶' },
+  { label: 'Samoyed', breed: 'samoyed', subBreed: '', emoji: '☁️' },
+  { label: 'Bernese Mountain Dog', breed: 'mountain', subBreed: 'bernese', emoji: '🏔️' },
+  { label: 'Beagle', breed: 'beagle', subBreed: '', emoji: '🐕' },
+  { label: 'Pomeranian', breed: 'pomeranian', subBreed: '', emoji: '🦁' },
+  { label: 'Pug', breed: 'pug', subBreed: '', emoji: '🐾' },
+  { label: 'Border Collie', breed: 'collie', subBreed: 'border', emoji: '🐕' },
+  { label: 'Australian Shepherd', breed: 'australian', subBreed: 'shepherd', emoji: '🐶' },
+  { label: 'Shih Tzu', breed: 'shihtzu', subBreed: '', emoji: '🐾' },
+  { label: 'Doberman', breed: 'doberman', subBreed: '', emoji: '🐕' },
+  { label: 'Great Dane', breed: 'dane', subBreed: 'great', emoji: '👑' },
+  { label: 'Basset Hound', breed: 'hound', subBreed: 'basset', emoji: '🐶' },
+  { label: 'Yorkshire Terrier', breed: 'terrier', subBreed: 'yorkshire', emoji: '🎀' },
+];
+
 let cachedBreeds: BreedOption[] | null = null;
 
 export async function getBreedOptions(): Promise<BreedOption[]> {
@@ -31,45 +136,49 @@ export async function getBreedOptions(): Promise<BreedOption[]> {
     return cachedBreeds;
   }
 
-  const response = await fetch(`${API_BASE}/breeds/list/all`);
-  if (!response.ok) {
-    throw new Error('Unable to connect to the dog breed directory.');
-  }
+  try {
+    const response = await fetch(`${API_BASE}/breeds/list/all`);
+    if (!response.ok) {
+      throw new Error('Unable to connect to the dog breed directory.');
+    }
 
-  const result = (await response.json()) as {
-    status: string;
-    message: Record<string, string[]>;
-  };
+    const result = (await response.json()) as {
+      status: string;
+      message: Record<string, string[]>;
+    };
 
-  if (result.status !== 'success' || !result.message) {
-    throw new Error('Received unexpected data from dog breed service.');
-  }
+    if (result.status !== 'success' || !result.message) {
+      throw new Error('Received unexpected data from dog breed service.');
+    }
 
-  const list: BreedOption[] = [];
+    const list: BreedOption[] = [];
 
-  for (const [breed, subBreeds] of Object.entries(result.message)) {
-    if (subBreeds.length === 0) {
-      list.push({
-        breed,
-        subBreed: '',
-        label: toTitleCase(breed),
-      });
-    } else {
-      for (const sub of subBreeds) {
+    for (const [breed, subBreeds] of Object.entries(result.message)) {
+      if (subBreeds.length === 0) {
         list.push({
           breed,
-          subBreed: sub,
-          label: `${toTitleCase(sub)} ${toTitleCase(breed)}`,
+          subBreed: '',
+          label: toTitleCase(breed),
         });
+      } else {
+        for (const sub of subBreeds) {
+          list.push({
+            breed,
+            subBreed: sub,
+            label: `${toTitleCase(sub)} ${toTitleCase(breed)}`,
+          });
+        }
       }
     }
+
+    list.sort((a, b) => a.label.localeCompare(b.label));
+    cachedBreeds = list;
+    return list;
+  } catch (err) {
+    console.warn('Using offline fallback breeds catalog:', err);
+    cachedBreeds = [...FALLBACK_BREEDS].sort((a, b) => a.label.localeCompare(b.label));
+    return cachedBreeds;
   }
-
-  // Sort alphabetically by label
-  list.sort((a, b) => a.label.localeCompare(b.label));
-
-  cachedBreeds = list;
-  return list;
 }
 
 const BREED_FACTS: Record<string, string> = {
@@ -92,6 +201,34 @@ const BREED_FACTS: Record<string, string> = {
   mastiff: 'Gentle giants known throughout history for quiet dignity, courage, and protective warmth.',
   collie: 'Graceful, intelligent herders famous for keen perception and devoted companionship.',
   maltese: 'Glamorous and lively toy companions that have brought joy and affection to households for thousands of years.',
+  akita: 'Noble, profoundly loyal Japanese protectors famous for courage and deep devotion to family.',
+  malamute: 'Powerful arctic freighting dogs with majestic heavy coats and a friendly, affectionate nature.',
+  bernese: 'Affectionate mountain gentle giants with striking tricolor coats and calm, loving hearts.',
+  shepherd: 'Versatile, intelligent workaholics who thrive on mental challenges, agility, and companionship.',
+  dane: 'Known as the "Apollo of dogs," combining tremendous stature with a gentle, patient heart.',
+  shihtzu: 'Bred specifically to be royal lap warmers with luxuriant hair and delightful companionship.',
+  terrier: 'Feisty, energetic, and full of character, with fearless determination and joyful pep.',
+  pomeranian: 'Tiny, extroverted puffballs with alert foxy faces and abundant spirited charm.',
+  basset: 'Mild-mannered hounds with soulful eyes, velvety long ears, and the second most sensitive nose in dogdom.',
+  bloodhound: 'Relentless trackers whose scent-trailing abilities are so reliable they are accepted in court.',
+  spaniel: 'Enthusiastic bird hunters with silky ears, tender expressions, and boundless affectionate joy.',
+  newfoundland: 'Legendary water rescue dogs with webbed paws, waterproof coats, and sweet "nanny dog" patience.',
+  stbernard: 'Famous alpine rescue dogs renowned for their enormous size, gentle patience, and kind expressions.',
+  vizsla: 'Known as the "velcro dog" for sticking close to their humans with athletic grace and warm affection.',
+  weimaraner: 'The "silver ghost" of dogs, sleek, fast, and intensely devoted to human companionship.',
+  whippet: 'Gentle, quiet sprinters capable of reaching 35 mph, who love nothing more than curling up on cozy blankets.',
+  greyhound: 'Ancient, aerodynamic speed champions who are remarkably calm, sweet, and gentle indoor companions.',
+  havanese: 'Cuba’s cheerful national dog with silky springy hair and an infectious sense of fun.',
+  papillon: 'Named for their delicate butterfly-wing ears, these are among the smartest and quickest toy dogs.',
+  chow: 'Ancient noble Chinese dogs distinguished by a lion-like ruff and unique blue-black tongue.',
+  sharpei: 'Iconic for deep wrinkles and a bristly coat, historically loyal guardians of ancient farms.',
+  basenji: 'The "barkless dog" of Africa who grooms like a cat and produces a musical yodel or chortle.',
+  schnauzer: 'Distinguished by aristocratic beards and bushy eyebrows with an alert, lively demeanor.',
+  cockapoo: 'One of the original loving designer companions, combining the sweetness of the cocker spaniel with poodle wit.',
+  labradoodle: 'Outgoing, friendly, and allergy-friendly stars known for their wavy coats and enthusiastic smiles.',
+  dhole: 'Wild whistling dogs of Central Asia celebrated for intricate pack communication.',
+  pyrenees: 'Imposing, calm flock guardians with majestic white coats and a patient, protective aura.',
+  ridgeback: 'African lion dogs distinguished by the unique hair ridge running counter-direction along their spine.',
 };
 
 const GENERAL_FACTS: string[] = [

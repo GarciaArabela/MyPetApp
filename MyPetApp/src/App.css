@@ -136,7 +136,14 @@
 .selector-box {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+
+.selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 480px;
 }
 
 .selector-label {
@@ -147,9 +154,47 @@
   text-transform: uppercase;
 }
 
+.clear-search-btn {
+  background: none;
+  border: none;
+  color: #bd744b;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.clear-search-btn:hover {
+  text-decoration: underline;
+}
+
+.search-and-select {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 480px;
+}
+
+.breed-search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  font-size: 14px;
+  color: #23332d;
+  background: #fffdf8;
+  border: 1px solid rgba(35, 51, 45, 0.2);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.breed-search-input:focus {
+  border-color: #bd744b;
+  box-shadow: 0 0 0 3px rgba(189, 116, 75, 0.15);
+}
+
 .breed-select {
   width: 100%;
-  max-width: 420px;
   height: 46px;
   padding: 0 14px;
   font-size: 15px;
@@ -165,6 +210,67 @@
 .breed-select:focus {
   border-color: #bd744b;
   box-shadow: 0 0 0 3px rgba(189, 116, 75, 0.15);
+}
+
+/* POPULAR BREEDS QUICK SELECT */
+.popular-breeds-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+  max-width: 480px;
+}
+
+.popular-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #79837b;
+  text-transform: uppercase;
+}
+
+.popular-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+}
+
+.popular-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 253, 248, 0.85);
+  border: 1px solid rgba(35, 51, 45, 0.15);
+  border-radius: 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #294239;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.popular-chip:hover:not(:disabled) {
+  background: #fffdf8;
+  border-color: #bd744b;
+  transform: translateY(-1px);
+}
+
+.popular-chip.active {
+  background: #294239;
+  color: #fffdf8;
+  border-color: #294239;
+  box-shadow: 0 2px 8px rgba(41, 66, 57, 0.2);
+}
+
+.popular-chip:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .action-row {
